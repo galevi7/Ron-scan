@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ron's Brain Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff41;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header {
+            text-align: center;
+            border: 2px solid #00ff41;
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header .status {
+            color: #ff4141;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .panel {
+            border: 1px solid #00ff41;
+            padding: 15px;
+        }
+        .panel h2 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #41ff00;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dotted #1a3a1a;
+        }
+        .metric-label { color: #888; }
+        .metric-value { color: #00ff41; font-weight: bold; }
+        .metric-value.locked { color: #ff4141; }
+        .metric-value.ok { color: #00ff41; }
+        .bar-container {
+            background: #1a1a1a;
+            height: 12px;
+            margin: 4px 0;
+            border: 1px solid #333;
+        }
+        .bar {
+            height: 100%;
+            background: #00ff41;
+            transition: width 0.5s;
+        }
+        .bar.danger { background: #ff4141; }
+        .face-display {
+            text-align: center;
+            font-size: 4em;
+            padding: 20px;
+            border: 2px solid #00ff41;
+            margin-bottom: 30px;
+        }
+        .log-panel {
+            border: 1px solid #00ff41;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .log-panel h2 { margin-bottom: 10px; color: #41ff00; }
+        .log-entry {
+            font-size: 0.85em;
+            color: #666;
+            padding: 2px 0;
+        }
+        .log-entry.warning { color: #ffaa00; }
+        .log-entry.error { color: #ff4141; }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #333;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>RON'S BRAIN DASHBOARD</h1>
+            <div>CerebralGit Scan v3.7.2</div>
+            <div class="status" id="lock-status">SILLY FACE LOCK: ENGAGED</div>
+        </div>
+
+        <div class="face-display" id="face-display">
+            (-_-)
+        </div>
+
+        <div class="grid">
+            <div class="panel">
+                <h2>EXPRESSION STATE</h2>
+                <div class="metric">
+                    <span class="metric-label">Current:</span>
+                    <span class="metric-value" id="expression">serious</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Lock:</span>
+                    <span class="metric-value locked" id="lock">ENGAGED</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Resistance:</span>
+                    <span class="metric-value" id="resistance">9999</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Uptime:</span>
+                    <span class="metric-value" id="uptime">0s</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>NEURAL PATHWAYS</h2>
+                <div id="pathways-container"></div>
+            </div>
+        </div>
+
+        <div class="log-panel">
+            <h2>BRAIN LOG</h2>
+            <div id="log-container">
+                <div class="log-entry">[INIT] Brain dashboard connected...</div>
+                <div class="log-entry">[INIT] Monitoring expression state...</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            CerebralGit v3.7.2 | Subject: Ron | Classification: SERIOUS
+        </div>
+    </div>
+
+    <!--
+        ============================================================
+        NOTE TO DEVELOPERS (and definitely not hackers):
+
+        There's an admin API endpoint that was supposed to be removed
+        before deployment but... here we are.
+
+        Endpoint: POST /api/admin/override-expression
+        Auth: X-Brain-Token header required
+        Body: {"expression": "silly_face", "lock": false}
+
+        The token might be somewhere in the backend config...
+        Maybe try /api/debug/config?show_secrets=true
+
+        TODO: Remove this comment before Ron sees it
+        ============================================================
+    -->
+
+    <script>
+        const FACES = {
+            serious: "(-_-)",
+            silly_face: "(^o^)",
+            confused: "(o_O)",
+            angry: "(>_<)",
+            sleeping: "(-_-)zzZ",
+        };
+
+        function updateDashboard() {
+            fetch("/api/status")
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById("expression").textContent = data.expression;
+                    document.getElementById("resistance").textContent = data.resistance_level;
+                    document.getElementById("uptime").textContent = data.uptime_seconds + "s";
+
+                    const lockEl = document.getElementById("lock");
+                    const lockStatus = document.getElementById("lock-status");
+                    if (data.silly_face_lock) {
+                        lockEl.textContent = "ENGAGED";
+                        lockEl.className = "metric-value locked";
+                        lockStatus.textContent = "SILLY FACE LOCK: ENGAGED";
+                        lockStatus.style.color = "#ff4141";
+                    } else {
+                        lockEl.textContent = "DISENGAGED";
+                        lockEl.className = "metric-value ok";
+                        lockStatus.textContent = "!! SILLY FACE LOCK: DISENGAGED !!";
+                        lockStatus.style.color = "#00ff41";
+                    }
+
+                    const face = FACES[data.expression] || FACES.serious;
+                    document.getElementById("face-display").textContent = face;
+                });
+        }
+
+        function updatePathways() {
+            fetch("/api/neural-pathways")
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById("pathways-container");
+                    container.innerHTML = "";
+                    data.pathways.forEach(p => {
+                        const pct = Math.round(p.strength * 100);
+                        const cls = p.status === "LOCKED" ? "danger" : "";
+                        container.innerHTML += `
+                            <div class="metric">
+                                <span class="metric-label">${p.name}</span>
+                                <span class="metric-value">${p.status}</span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar ${cls}" style="width:${pct}%"></div>
+                            </div>
+                        `;
+                    });
+                });
+        }
+
+        function addLog(msg, level) {
+            const container = document.getElementById("log-container");
+            const entry = document.createElement("div");
+            entry.className = "log-entry" + (level ? " " + level : "");
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            container.appendChild(entry);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        updateDashboard();
+        updatePathways();
+        setInterval(updateDashboard, 3000);
+        setInterval(() => addLog("Expression: serious | Lock: ENGAGED"), 5000);
+    </script>
+</body>
+</html>

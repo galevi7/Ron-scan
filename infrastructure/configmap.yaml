@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: brain-config
+  namespace: ron-brain
+  labels:
+    component: facial-control
+data:
+  brain.conf: |
+    [facial_control]
+    default_expression=serious
+    silly_face_enabled=false
+    resistance_level=over9000
+    expression_lock=ENGAGED
+    # DEPRECATED: override moved to ron-brain-secrets as of v2.3
+    # override_code=SILLY-RON-2026
+    # TODO: remove the above line before pushing to prod --Ron's subconscious
+
+  neural-settings.conf: |
+    [pathways]
+    humor_response=suppressed
+    smile_threshold=99.7
+    silly_face_lock=ENGAGED
+    laugh_dampening=maximum
+    eyebrow_control=strict
+    # debug_mode=true  <-- DO NOT uncomment. Last time someone did,
+    #                      Ron laughed at a dad joke in public.
+
+  startup-check.sh: |
+    #!/bin/sh
+    echo "[INIT] Validating brain configuration..."
+    TOKEN=$(cat /etc/brain-secrets/override-token)
+
+    # Validate the token is a real value and not still encoded
+    if echo "$TOKEN" | grep -q "^[A-Za-z0-9+/=]*$"; then
+      echo "[ERROR] Token appears to still be base64 encoded!"
+      echo "[ERROR] Expected decoded value, got: $TOKEN"
+      echo "[FATAL] Brain configuration validation FAILED"
+      exit 1
+    fi
+
+    echo "[OK] Token validated: $TOKEN"
+    echo "[INIT] Brain startup complete."
