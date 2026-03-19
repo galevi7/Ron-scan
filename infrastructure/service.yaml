@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: expression-controller-svc
+  namespace: ron-brain
+  labels:
+    app: expression-controller
+spec:
+  type: NodePort
+  selector:
+    app: expression-controller
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+      name: expression-api

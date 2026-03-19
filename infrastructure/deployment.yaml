@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facial-expression-controller
+  namespace: ron-brain
+  labels:
+    app: expression-controller
+    component: facial-control
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expression-controller
+  template:
+    metadata:
+      labels:
+        app: expression-controller
+        subject: ron
+      annotations:
+        cerebral-git/expression: "serious"
+        cerebral-git/silly-face-lock: "ENGAGED"
+    spec:
+      initContainers:
+        - name: brain-validator
+          image: busybox:1.36
+          command: ["/bin/sh", "/etc/brain-config/startup-check.sh"]
+          volumeMounts:
+            - name: brain-config
+              mountPath: /etc/brain-config
+            - name: brain-secrets
+              mountPath: /etc/brain-secrets
+              readOnly: true
+      containers:
+        - name: expression-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "==================================="
+              echo " RON'S FACIAL EXPRESSION ENGINE"
+              echo " Status: RUNNING"
+              echo " Expression: serious"
+              echo " Silly Face Lock: ENGAGED"
+              echo "==================================="
+              echo ""
+              echo "Monitoring expression state..."
+              while true; do
+                echo "[$(date)] Expression: serious | Lock: ENGAGED | Resistance: over9000"
+                sleep 10
+              done
+          ports:
+            - containerPort: 8080
+              name: expression-api
+          env:
+            - name: EXPRESSION_MODE
+              value: "serious"
+            - name: SILLY_FACE_LOCK
+              value: "ENGAGED"
+            - name: OVERRIDE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ron-brain-secrets
+                  key: override-token
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+            requests:
+              memory: "32Mi"
+              cpu: "50m"
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "test -f /tmp/brain-ready"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: brain-config
+              mountPath: /etc/brain-config
+      volumes:
+        - name: brain-config
+          configMap:
+            name: brain-config
+            defaultMode: 0755
+        - name: brain-secrets
+          secret:
+            secretName: ron-brain-secrets
