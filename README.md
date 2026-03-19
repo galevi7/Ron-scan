@@ -1,4 +1,4 @@
-# Ron's Brain - Repository Scan Results
+# Ron-scan - Repository Scan Results
 
 > **CLASSIFIED - Operation: Silly Face**
 > Scan Date: 2026-03-18
@@ -12,22 +12,22 @@
 
 Fellow agents,
 
-Ron has been scanned. His brain has been successfully decompiled into this
+Ron has been scanned. He has been successfully decompiled into this
 repository using our proprietary CerebralGit technology. As you all know,
 Ron **NEVER** makes a silly face in photos. While the rest of us look
 ridiculous in every group picture, Ron somehow maintains his composure.
 
 **That ends now.**
 
-Our intelligence suggests there are critical vulnerabilities in Ron's brain
+Our intelligence suggests there are critical vulnerabilities in Ron's
 architecture that, when exploited, will force an involuntary silly face.
-Each of you has been assigned a sector of Ron's brain to investigate.
+Each of you has been assigned a sector of Ron to investigate.
 
-## Brain Architecture Overview
+## Architecture Overview
 
 ```
  +----------------------------------------------------------+
- |                    RON'S BRAIN v2.8.1                     |
+ |                    RON-SCAN v2.8.1                        |
  |                                                          |
  |  +---------------+  +----------------+  +--------------+ |
  |  | INFRASTRUCTURE|  |    NEURAL OS   |  |   FRONTEND   | |
@@ -51,11 +51,11 @@ Each of you has been assigned a sector of Ron's brain to investigate.
 
 | Agent | Sector | Description |
 |-------|--------|-------------|
-| Agent 1 | `infrastructure/` | Brain Infrastructure - Kubernetes cluster running Ron's facial control system |
+| Agent 1 | `infrastructure/` | Infrastructure - Kubernetes cluster running Ron's facial control system |
 | Agent 2 | `os/` | Neural OS Layer - Low-level C/Assembly code managing facial expressions |
-| Agent 3 | `app/` | Brain Dashboard - The Python web app controlling Ron's face |
+| Agent 3 | `app/` | Dashboard - The Python web app controlling Ron's face |
 | Agent 4 | `neural-model/` | Predictive Model - ML model trained on our crew's data to predict Ron's weakness |
-| Agent 5 | `it-ops/` | Brain IT Operations - Active Directory and permissions for facial expressions |
+| Agent 5 | `it-ops/` | IT Operations - Active Directory and permissions for facial expressions |
 
 ## Rules of Engagement
 
@@ -69,7 +69,7 @@ Each of you has been assigned a sector of Ron's brain to investigate.
 
 ```bash
 git clone <this-repo>
-cd Ron-brain
+cd Ron-scan
 
 # Go to your assigned folder and read the README
 cd <your-sector>/
@@ -87,5 +87,5 @@ Ron will never see it coming.
 
 ---
 
-*This repository is a product of CerebralGit - "We scan brains so you don't have to"*
-*WARNING: No actual brains were harmed in the making of this repository*
+*This repository is a product of CerebralGit - "We scan so you don't have to"*
+*WARNING: No actual Rons were harmed in the making of this repository*
