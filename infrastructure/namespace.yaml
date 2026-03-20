@@ -1,11 +1,140 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: ron-brain
   labels:
-    project: cerebral-scan
+    project: ron-scan
     subject: ron
-    scan-version: "3.7.2"
+    system: nervous
+    organ: brain
+    body-region: head
   annotations:
-    cerebral-git/scan-date: "2026-03-18"
-    cerebral-git/warning: "VULNERABILITY DETECTED IN EXPRESSION SUBSYSTEM"
+    ron-scan/function: "Central processing and decision making"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-heart
+  labels:
+    project: ron-scan
+    subject: ron
+    system: cardiovascular
+    organ: heart
+    body-region: torso
+  annotations:
+    ron-scan/function: "Emotional regulation and blood flow control"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-lungs
+  labels:
+    project: ron-scan
+    subject: ron
+    system: respiratory
+    organ: lungs
+    body-region: torso
+  annotations:
+    ron-scan/function: "Breathing control and oxygen distribution"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-spine
+  labels:
+    project: ron-scan
+    subject: ron
+    system: skeletal
+    organ: spine
+    body-region: back
+  annotations:
+    ron-scan/function: "Posture control and structural integrity"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-hands
+  labels:
+    project: ron-scan
+    subject: ron
+    system: motor
+    organ: hands
+    body-region: upper-limbs
+  annotations:
+    ron-scan/function: "Gesture control and finger coordination"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-stomach
+  labels:
+    project: ron-scan
+    subject: ron
+    system: digestive
+    organ: stomach
+    body-region: torso
+  annotations:
+    ron-scan/function: "Gut reactions and butterflies generation"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-ears
+  labels:
+    project: ron-scan
+    subject: ron
+    system: auditory
+    organ: ears
+    body-region: head
+  annotations:
+    ron-scan/function: "Sound processing and selective hearing"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-knees
+  labels:
+    project: ron-scan
+    subject: ron
+    system: musculoskeletal
+    organ: knees
+    body-region: lower-limbs
+  annotations:
+    ron-scan/function: "Reflex control and joint stability"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-nose
+  labels:
+    project: ron-scan
+    subject: ron
+    system: olfactory
+    organ: nose
+    body-region: head
+  annotations:
+    ron-scan/function: "Smell detection and airflow management"
+    ron-scan/scan-date: "2026-03-18"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ron-eyes
+  labels:
+    project: ron-scan
+    subject: ron
+    system: visual
+    organ: eyes
+    body-region: head
+  annotations:
+    ron-scan/function: "Visual processing and focus control"
+    ron-scan/scan-date: "2026-03-18"

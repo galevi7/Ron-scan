@@ -1,82 +1,70 @@
+---
+# ===================== BRAIN =====================
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: facial-expression-controller
+  name: brain-processor
   namespace: ron-brain
   labels:
-    app: expression-controller
-    component: facial-control
+    app: brain-processor
+    system: nervous
+    organ: brain
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: expression-controller
+      app: brain-processor
   template:
     metadata:
       labels:
-        app: expression-controller
-        subject: ron
+        app: brain-processor
+        organ: brain
+        system: nervous
       annotations:
-        cerebral-git/expression: "serious"
-        cerebral-git/silly-face-lock: "ENGAGED"
+        ron-scan/expression: "panicked"
+        ron-scan/current-obsession: "DND survival strategies"
     spec:
-      initContainers:
-        - name: brain-validator
-          image: busybox:1.36
-          command: ["/bin/sh", "/etc/brain-config/startup-check.sh"]
-          volumeMounts:
-            - name: brain-config
-              mountPath: /etc/brain-config
-            - name: brain-secrets
-              mountPath: /etc/brain-secrets
-              readOnly: true
       containers:
-        - name: expression-engine
+        - name: dnd-survival-planner
           image: busybox:1.36
           command:
             - /bin/sh
             - -c
             - |
               echo "==================================="
-              echo " RON'S FACIAL EXPRESSION ENGINE"
-              echo " Status: RUNNING"
-              echo " Expression: serious"
-              echo " Silly Face Lock: ENGAGED"
+              echo " RON'S BRAIN PROCESSOR"
+              echo " Status: OVERLOADED"
+              echo " Current task: NOT DYING IN DND"
               echo "==================================="
               echo ""
-              echo "Monitoring expression state..."
-              while true; do
-                echo "[$(date)] Expression: serious | Lock: ENGAGED | Resistance: over9000"
-                sleep 10
-              done
+              echo "[BRAIN] Loading DND survival strategies..."
+              echo "[BRAIN] Strategy #1: Hide behind the paladin"
+              echo "[BRAIN] Strategy #2: Never split the party"
+              echo "[BRAIN] Strategy #3: Don't touch the glowing orb"
+              echo "[BRAIN] Strategy #4: Always check for traps"
+              echo "[BRAIN] Strategy #5: Never say 'it can't get worse'"
+              echo "[BRAIN] Strategy #6: Stock up on healing potions"
+              echo "[BRAIN] Strategy #7: Don't anger the DM"
+              echo "[BRAIN] Strategy #8: Never open the mysterious book"
+              echo "[BRAIN] Strategy #9: Keep a backup character ready"
+              echo "[BRAIN] Strategy #10: DON'T PET THE OWLBEAR"
+              echo ""
+              echo "[BRAIN] WARNING: Too many strategies to process"
+              echo "[BRAIN] What if the dragon has TWO heads??"
+              echo "[BRAIN] What if the mimic IS the floor??"
+              echo "[BRAIN] What if Stampfer won't save me??"
+              echo "[BRAIN] FATAL: Brain overloaded. Cannot handle DND anxiety."
+              echo "[BRAIN] Shutting down..."
+              exit 1
           ports:
             - containerPort: 8080
-              name: expression-api
-          env:
-            - name: EXPRESSION_MODE
-              value: "serious"
-            - name: SILLY_FACE_LOCK
-              value: "ENGAGED"
-            - name: OVERRIDE_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: ron-brain-secrets
-                  key: override-token
+              name: brain-api
+            - containerPort: 8180
+              name: nerve-receptor
           resources:
             limits:
               memory: "64Mi"
               cpu: "100m"
-            requests:
-              memory: "32Mi"
-              cpu: "50m"
-          readinessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - "test -f /tmp/brain-ready"
-            initialDelaySeconds: 5
-            periodSeconds: 10
           volumeMounts:
             - name: brain-config
               mountPath: /etc/brain-config
@@ -85,6 +73,399 @@ spec:
           configMap:
             name: brain-config
             defaultMode: 0755
-        - name: brain-secrets
-          secret:
-            secretName: ron-brain-secrets
+---
+# ===================== HEART =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heart-pump
+  namespace: ron-heart
+  labels:
+    app: heart-pump
+    system: cardiovascular
+    organ: heart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heart-pump
+  template:
+    metadata:
+      labels:
+        app: heart-pump
+        organ: heart
+        system: cardiovascular
+    spec:
+      containers:
+        - name: cardiac-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[HEART] Cardiac system online. BPM: 72 (resting)"
+              while true; do
+                echo "[$(date)] heartbeat | bpm=72 | emotion=calm"
+                sleep 5
+              done
+          ports:
+            - containerPort: 8081
+              name: heart-api
+            - containerPort: 8181
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== LUNGS =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lung-controller
+  namespace: ron-lungs
+  labels:
+    app: lung-controller
+    system: respiratory
+    organ: lungs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lung-controller
+  template:
+    metadata:
+      labels:
+        app: lung-controller
+        organ: lungs
+        system: respiratory
+    spec:
+      containers:
+        - name: breathing-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[LUNGS] Respiratory system online."
+              while true; do
+                echo "[$(date)] inhale... exhale..."
+                sleep 4
+              done
+          ports:
+            - containerPort: 8082
+              name: lung-api
+            - containerPort: 8182
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== SPINE =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spine-controller
+  namespace: ron-spine
+  labels:
+    app: spine-controller
+    system: skeletal
+    organ: spine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spine-controller
+  template:
+    metadata:
+      labels:
+        app: spine-controller
+        organ: spine
+        system: skeletal
+    spec:
+      containers:
+        - name: posture-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[SPINE] Posture system online. Stance: composed"
+              while true; do
+                echo "[$(date)] posture=upright | composure=steady"
+                sleep 8
+              done
+          ports:
+            - containerPort: 8083
+              name: spine-api
+            - containerPort: 8183
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== HANDS =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hand-controller
+  namespace: ron-hands
+  labels:
+    app: hand-controller
+    system: motor
+    organ: hands
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hand-controller
+  template:
+    metadata:
+      labels:
+        app: hand-controller
+        organ: hands
+        system: motor
+    spec:
+      containers:
+        - name: gesture-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[HANDS] Motor control online."
+              while true; do
+                echo "[$(date)] gesture=neutral | grip=steady"
+                sleep 6
+              done
+          ports:
+            - containerPort: 8084
+              name: hands-api
+            - containerPort: 8184
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== STOMACH =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stomach-processor
+  namespace: ron-stomach
+  labels:
+    app: stomach-processor
+    system: digestive
+    organ: stomach
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stomach-processor
+  template:
+    metadata:
+      labels:
+        app: stomach-processor
+        organ: stomach
+        system: digestive
+    spec:
+      containers:
+        - name: gut-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[STOMACH] Digestive system online."
+              while true; do
+                echo "[$(date)] digestion=normal | gut-feeling=stable"
+                sleep 7
+              done
+          ports:
+            - containerPort: 8085
+              name: stomach-api
+            - containerPort: 8185
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== EARS =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ear-receiver
+  namespace: ron-ears
+  labels:
+    app: ear-receiver
+    system: auditory
+    organ: ears
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ear-receiver
+  template:
+    metadata:
+      labels:
+        app: ear-receiver
+        organ: ears
+        system: auditory
+    spec:
+      containers:
+        - name: hearing-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[EARS] Auditory system online."
+              while true; do
+                echo "[$(date)] hearing=active | selective-mode=on"
+                sleep 6
+              done
+          ports:
+            - containerPort: 8086
+              name: ears-api
+            - containerPort: 8186
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== KNEES =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knee-reflex
+  namespace: ron-knees
+  labels:
+    app: knee-reflex
+    system: musculoskeletal
+    organ: knees
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knee-reflex
+  template:
+    metadata:
+      labels:
+        app: knee-reflex
+        organ: knees
+        system: musculoskeletal
+    spec:
+      containers:
+        - name: reflex-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[KNEES] Joint control online."
+              while true; do
+                echo "[$(date)] stability=normal | reflex=standby"
+                sleep 5
+              done
+          ports:
+            - containerPort: 8087
+              name: joint-api
+            - containerPort: 8187
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== NOSE =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nose-sensor
+  namespace: ron-nose
+  labels:
+    app: nose-sensor
+    system: olfactory
+    organ: nose
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nose-sensor
+  template:
+    metadata:
+      labels:
+        app: nose-sensor
+        organ: nose
+        system: olfactory
+    spec:
+      containers:
+        - name: sniff-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[NOSE] Olfactory system online."
+              while true; do
+                echo "[$(date)] airflow=normal | detection=idle"
+                sleep 5
+              done
+          ports:
+            - containerPort: 8088
+              name: sniff-api
+            - containerPort: 8188
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+---
+# ===================== EYES =====================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eye-controller
+  namespace: ron-eyes
+  labels:
+    app: eye-controller
+    system: visual
+    organ: eyes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eye-controller
+  template:
+    metadata:
+      labels:
+        app: eye-controller
+        organ: eyes
+        system: visual
+    spec:
+      containers:
+        - name: vision-engine
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "[EYES] Visual system online."
+              while true; do
+                echo "[$(date)] vision=20/20 | focus=steady"
+                sleep 5
+              done
+          ports:
+            - containerPort: 8089
+              name: vision-api
+            - containerPort: 8189
+              name: nerve-receptor
+          resources:
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
