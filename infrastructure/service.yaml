@@ -1,16 +1,202 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: expression-controller-svc
+  name: brain-svc
   namespace: ron-brain
   labels:
-    app: expression-controller
+    app: brain-processor
+    organ: brain
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: expression-controller
+    app: brain-processor
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 30080
-      name: expression-api
+      name: brain-api
+    - port: 8180
+      targetPort: 8180
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heart-svc
+  namespace: ron-heart
+  labels:
+    app: heart-pump
+    organ: heart
+spec:
+  type: ClusterIP
+  selector:
+    app: heart-pump
+  ports:
+    - port: 8081
+      targetPort: 8081
+      name: heart-api
+    - port: 8181
+      targetPort: 8181
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lung-svc
+  namespace: ron-lungs
+  labels:
+    app: lung-controller
+    organ: lungs
+spec:
+  type: ClusterIP
+  selector:
+    app: lung-controller
+  ports:
+    - port: 8082
+      targetPort: 8082
+      name: lung-api
+    - port: 8182
+      targetPort: 8182
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spine-svc
+  namespace: ron-spine
+  labels:
+    app: spine-controller
+    organ: spine
+spec:
+  type: ClusterIP
+  selector:
+    app: spine-controller
+  ports:
+    - port: 8083
+      targetPort: 8083
+      name: spine-api
+    - port: 8183
+      targetPort: 8183
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hands-svc
+  namespace: ron-hands
+  labels:
+    app: hand-controller
+    organ: hands
+spec:
+  type: ClusterIP
+  selector:
+    app: hand-controller
+  ports:
+    - port: 8084
+      targetPort: 8084
+      name: hands-api
+    - port: 8184
+      targetPort: 8184
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stomach-svc
+  namespace: ron-stomach
+  labels:
+    app: stomach-processor
+    organ: stomach
+spec:
+  type: ClusterIP
+  selector:
+    app: stomach-processor
+  ports:
+    - port: 8085
+      targetPort: 8085
+      name: stomach-api
+    - port: 8185
+      targetPort: 8185
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ears-svc
+  namespace: ron-ears
+  labels:
+    app: ear-receiver
+    organ: ears
+spec:
+  type: ClusterIP
+  selector:
+    app: ear-receiver
+  ports:
+    - port: 8086
+      targetPort: 8086
+      name: ears-api
+    - port: 8186
+      targetPort: 8186
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knee-svc
+  namespace: ron-knees
+  labels:
+    app: knee-reflex
+    organ: knees
+spec:
+  type: ClusterIP
+  selector:
+    app: knee-reflex
+  ports:
+    - port: 8087
+      targetPort: 8087
+      name: joint-api
+    - port: 8187
+      targetPort: 8187
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nose-svc
+  namespace: ron-nose
+  labels:
+    app: nose-sensor
+    organ: nose
+spec:
+  type: NodePort
+  selector:
+    app: nose-sensor
+  ports:
+    - port: 8088
+      targetPort: 8088
+      name: sniff-api
+    - port: 8188
+      targetPort: 8188
+      nodePort: 31002
+      name: nerve-receptor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eye-svc
+  namespace: ron-eyes
+  labels:
+    app: eye-controller
+    organ: eyes
+spec:
+  type: NodePort
+  selector:
+    app: eye-controller
+  ports:
+    - port: 8089
+      targetPort: 8089
+      name: vision-api
+    - port: 8189
+      targetPort: 8189
+      nodePort: 31003
+      name: nerve-receptor

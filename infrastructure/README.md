@@ -1,14 +1,19 @@
-# Infrastructure Sector - Ron's Brain Cluster
+# Infrastructure Sector - Ron's Body Cluster
 
-> **Agent 1 - Your Mission: Deploy Ron's brain to a local Kubernetes cluster
-> and figure out why the Facial Expression Controller keeps crashing.**
+> **Agent 1 - Your Mission: Deploy Ron's full body scan to a local Kubernetes
+> cluster. Each organ is a namespace. Something isn't locked down the way
+> it should be. Find it.**
 
 ## Background
 
-Ron's facial control system runs as a Kubernetes deployment. The cluster was
-exported directly from the CerebralGit scan, but something is wrong - the
-pods keep crashing and the silly face override is locked behind a corrupted
-secret.
+Ron's body has been mapped to a Kubernetes cluster using CerebralGit. Each
+organ runs in its own namespace with its own deployment and service. The
+scan looks clean on the surface, but the scanner flagged something during
+export — some body parts might be reachable from outside the cluster.
+
+If you can figure out which ones, and how they accept input, you might be
+able to trigger involuntary movement. Cross-reference with the Neural OS
+in the `os/` folder — that's where the nerve impulse protocol lives.
 
 ## Prerequisites
 
@@ -32,79 +37,75 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 ```
 
-## Step 3: Watch It Break
+## Step 3: Explore Ron
 
 ```bash
-kubectl get pods -n ron-brain -w
-```
+# See all of Ron's organs
+kubectl get namespaces --show-labels
 
-You should see the pod going into `CrashLoopBackOff`. That's your starting
-point.
+# What's running everywhere?
+kubectl get svc --all-namespaces
+```
 
 ## Investigation Guide
 
-Start debugging. Here are some useful commands:
+Start by getting a lay of the land. Look at what's deployed, how services
+are configured, and whether everything is locked down the same way.
 
 ```bash
-# Check pod status
-kubectl get pods -n ron-brain
+# Overview of all services
+kubectl get svc -A -o wide
 
-# Check pod logs - why is it crashing?
-kubectl logs -n ron-brain <pod-name>
+# Dig into a specific namespace
+kubectl get all -n <namespace>
 
-# Describe the pod for events and config
-kubectl describe pod -n ron-brain <pod-name>
-
-# Look at the configmap - anything suspicious?
-kubectl get configmap brain-config -n ron-brain -o yaml
-
-# Look at the secrets - but can you REALLY read them?
-kubectl get secret ron-brain-secrets -n ron-brain -o yaml
+# Check namespace labels - anything stand out?
+kubectl get ns --show-labels
 ```
+
+Once you find something interesting, look at the `os/` folder. The nerve
+system there speaks the same protocol as certain ports in this cluster.
 
 ## Hints (read only if stuck)
 
 <details>
-<summary>Hint 1 - Where to look</summary>
-The pod crashes because the init container fails. Check the init container
-logs specifically.
+<summary>Hint 1 - Compare the services</summary>
+Not all services are created equal. Compare the service types across
+namespaces. Most are one type. A few are different.
 </details>
 
 <details>
-<summary>Hint 2 - The secret problem</summary>
-Kubernetes secrets are base64 encoded. But what if someone encoded the value
-BEFORE putting it in the secret YAML? That means Kubernetes decodes it once,
-but you still get... another base64 string. Try decoding the secret values
-TWICE.
+<summary>Hint 2 - The port names matter</summary>
+Every organ has a nerve-receptor port. But are they all protected the
+same way? Check the service type for each.
 </details>
 
 <details>
-<summary>Hint 3 - The configmap clue</summary>
-Read the configmap carefully. There are commented-out lines that were
-"deprecated" but they contain breadcrumbs. Cross-reference with the secret.
+<summary>Hint 3 - Connect the dots</summary>
+The exposed ports accept nerve impulses. The os/ folder contains the
+nerve system code that generates those impulses. If you can send the
+right signal to the right port, you can make something move that Ron
+didn't intend to move.
 </details>
 
 <details>
-<summary>Hint 4 - The smoking gun</summary>
+<summary>Hint 4 - The brain still has its own puzzle</summary>
+The ron-brain namespace has a double-encoded secret. Decode it twice:
 
 ```bash
 kubectl get secret ron-brain-secrets -n ron-brain -o jsonpath='{.data.trigger-phrase}' | base64 -d | base64 -d
 ```
-
-The trigger phrase was double-encoded. Decode it twice and you'll find
-Ron's silly face trigger.
 </details>
 
 ## What You're Looking For
 
-1. Why the pod crashes (the init container validation fails)
-2. The double-encoded secret and what it actually says
-3. The commented-out override code in the configmap
-4. The trigger phrase hidden in the secrets
+1. Which body parts are accessible from outside the cluster
+2. What protocol those ports speak (check the os/ folder)
+3. How to craft input that triggers involuntary movement
+4. The double-encoded secret in ron-brain (bonus)
 
-Film yourself going through the debugging process. The moment of discovery
-is what we want on camera.
+Film yourself going through the investigation. The discovery is the fun part.
 
 ---
 
-*"His infrastructure is solid, but his secrets are not." - CerebralGit Report*
+*"Everything looked locked down. Almost everything." - CerebralGit Report*
